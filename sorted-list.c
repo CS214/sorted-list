@@ -15,16 +15,13 @@ SortedListPtr SLCreate(CompareFuncT cf){
 	return list;
 }
 
-void SLDestroy(SortedListPtr list){
+void SLDestroy(SortedListPtr list){ //NOT COMPLETED
 	if(list != NULL) //when list is done make loop to traverse through entire tree
 		free(list);
 }
 
-SortedListPtr
-
 int SLInsert(SortedListPtr list, void *newObj){
-	TreePtr tempRoot = (TreePtr) malloc(sizeof(struct AVLTree));
-	tempRoot->balanceFactor = 0;
+	TreePtr tempRoot = (TreePtr) malloc(sizeof(struct BinaryTree));
 	tempRoot->data = newObj;
 	tempRoot->left = NULL;
 	tempRoot->right = NULL;
@@ -36,11 +33,24 @@ int SLInsert(SortedListPtr list, void *newObj){
 	else{
 		TreePtr traverse = list->root;
 		while(!(traverse->left == NULL && traverse->right == NULL)){ //TEMPORARY CONDITION FIX IT LATER (ONLY THE PLACE TO BE ADDED MUST BE NULL NOT BOTH)
+			//can also make condition infinite since code is returned after the addition of object
 			if(list->compare(traverse, newObj) == -1){ //if the new object is larger than the node being looked at
-				traverse = traverse->right;
+				if(traverse->right == NULL){
+					traverse->right = tempRoot;
+					return 1;
+				}
+				else{
+					traverse = traverse->right;
+				}
 			}
 			else if(cf(traverse, newObj) == 1){ //if the new object is smaller than the node being looked at
-				traverse = traverse->left;
+				if(traverse->left == NULL){
+					traverse->left = tempRoot;
+					return 1;
+				}
+				else{
+					traverse = traverse->left;
+				}		
 			}
 			else{ //if the object is a duplicate
 				return 0; //return a duplicate error
@@ -50,27 +60,25 @@ int SLInsert(SortedListPtr list, void *newObj){
 	}
 }
 
-int SLRemove(SortedListPtr list, void *newObj){
+int SLRemove(SortedListPtr list, void *newObj){ //NOT COMPLETED
 	return 0;
 }
 
 SortedListIteratorPtr SLCreateIterator(SortedListPtr list){
+	SortedListIteratorPtr iterator = (SortedListIteratorPtr) malloc(sizeof(struct SortedListIterator));
+	iterator->data = list->root;
+	iterator->parentStack = NULL;
 
-	SortedListIteratorPtr itr = (SortedListIteratorPtr)malloc(sizeof(SortedListIteratorPtr));
-	if(list->front != NULL)
-	{
-		itr->ptr = list->front;
-		list->front->reCount++;
-		return itr;
+	while(iterator->left != NULL){
+		if(iterator)
 	}
-	return NULL;
 }
 
-void SLDestroyIterator(SortedListIteratorPtr iter){
+void SLDestroyIterator(SortedListIteratorPtr iter){ //NOT COMPLETED
 	if(iter != NULL)
 		free(iter);
 }
 
-void *SLNextItem(SortedListIteratorPtr iter){
+void *SLNextItem(SortedListIteratorPtr iter){ //NOT COMPLETED
 	return NULL;
 }
