@@ -7,49 +7,6 @@
 #include <stdlib.h>
 
 /*
-* ARE WE ALLOWED TO MODIFY SORTED-LIST.H??
-* WE NEED A DEFINITION OF WHAT A TREE IS
-*/
-struct BinaryTree
-{
-	void * data;
-	TreePtr leftChild;
-	TreePtr rightChild;
-};
-typedef struct BinaryTree * TreePtr;
-
-//is used to keep track of current nodes parent in the tree (necessary for iteration)
-struct ParentStack
-{
-	void * parent;
-	ParentPtr nextParent; //essentially a linked list that behaves like a stack
-};
-typedef struct ParentStack * ParentPtr;
-
-/*
- * Sorted list type.  You need to fill in the type as part of your implementation.
- */
-struct SortedList
-{
-	TreePtr root;
-	CompareFuncT compare; 
-};
-typedef struct SortedList* SortedListPtr;
-
-
-/*
- * Iterator type for user to "walk" through the list item by item, from
- * beginning to end.  You need to fill in the type as part of your implementation.
- */
-struct SortedListIterator
-{
-	void * data;
-	ParentPtr parentStack;
-};
-typedef struct SortedListIterator* SortedListIteratorPtr;
-
-
-/*
  * When your sorted list is used to store objects of some type, since the
  * type is opaque to you, you will need a comparator function to order
  * the objects in your sorted list.
@@ -62,8 +19,51 @@ typedef struct SortedListIterator* SortedListIteratorPtr;
  * You will be given a comparator function when a new sorted list is
  * created.
  */
-
+//MOVED THIS FUNCTION UP BECAUSE TYPE IS USED IN SORTEDITERAROT STRUCT
 typedef int (*CompareFuncT)(void *, void *);
+
+/*
+* ARE WE ALLOWED TO MODIFY SORTED-LIST.H??
+* WE NEED A DEFINITION OF WHAT A TREE IS
+*/
+struct BinaryTree
+{
+	void * data;
+	struct BinaryTree * leftChild;
+	struct BinaryTree * rightChild;
+};
+typedef struct BinaryTree * TreePtr;
+
+//is used to keep track of current nodes parent in the tree (necessary for iteration)
+//THIS MIGHT NOT BE NECESSARY, MIGHT BE ABLE TO DO THIS WITH SORTEDLISTITERATOR
+struct ParentStack
+{
+	TreePtr parent;
+	struct ParentStack * parentList; //essentially a linked list that behaves like a stack
+};
+typedef struct ParentStack * ParentPtr;
+
+/*
+ * Sorted list type.  You need to fill in the type as part of your implementation.
+ */
+struct SortedList
+{
+	TreePtr root;
+	CompareFuncT compare; //fix this (CompareFuncT is defined later)
+};
+typedef struct SortedList* SortedListPtr;
+
+
+/*
+ * Iterator type for user to "walk" through the list item by item, from
+ * beginning to end.  You need to fill in the type as part of your implementation.
+ */
+struct SortedListIterator
+{
+	TreePtr currentItem; //the current item being looked at
+	ParentPtr parentStack; //used to traceback to parent in order to traverse list
+};
+typedef struct SortedListIterator* SortedListIteratorPtr;
 
 
 /*
